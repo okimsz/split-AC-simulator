@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>THERMAL / Split-system laboratory</title>
+
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <span class="mark">≋</span>
+        <div>THERMAL<small>MECHANICAL EXPLORATIONS / 01</small></div>
+      </div>
+      <div class="header-right">
+        <span class="eyebrow">An interactive engineering study</span>
+        <span class="pill"> <span class="dot"> </span>OFFLINE READY</span>
+        <button id="help" aria-label="Open guide">Guide ↗</button>
+      </div>
+    </header>
+    <main>
+      <section class="stage" aria-label="Interactive 3D split air conditioner">
+        <div
+          id="viewport"
+          aria-label="Drag to orbit. Scroll or pinch to zoom. Select components to inspect."
+          tabindex="0"
+        ></div>
+        <div class="heading">
+          <div class="eyebrow">Inside the everyday / 001</div>
+          <h1>Split-type<br />air conditioner.</h1>
+          <p>Two units. One continuous heat-transfer cycle.</p>
+        </div>
+        <div class="view-badge">
+          <span id="modeText">CUTAWAY VIEW</span>
+          <span id="runText">COOLING</span>
+        </div>
+        <div class="stage-tools">
+          <button id="labelsToggle" class="active" aria-pressed="true">
+            Labels
+          </button>
+          <button id="tour" aria-pressed="false">Auto-tour</button>
+          <button id="reset" aria-label="Reset camera">↺ View</button>
+        </div>
+        <div id="labels"></div>
+        <div class="legend">
+          <span> <i style="background: #df774e"> </i>High-pressure vapor</span>
+          <span> <i style="background: #cba04b"> </i>Liquid</span>
+          <span>
+            <i style="background: #259da7"> </i>Low-pressure refrigerant</span
+          >
+        </div>
+        <div class="stage-bottom">
+          <div class="view-switch" aria-label="Assembly view">
+            <button data-view="assembled">Assembled</button>
+            <button data-view="cutaway" class="active">Cutaway</button>
+            <button data-view="exploded">Explode parts ↗</button>
+          </div>
+          <div class="hint">
+            DRAG TO ORBIT · SCROLL TO ZOOM<br />
+            <span id="cameraText">Auto-tour after 12 seconds idle</span>
+          </div>
+        </div>
+      </section>
+      <aside>
+        <section class="cycle-section">
+          <div class="section-head">
+            <b>The cooling cycle</b>
+            <span class="eyebrow">01—04</span>
+          </div>
+          <div class="cycle-list">
+            <button class="cycle selected" data-part="compressor">
+              <span class="num">01</span>
+              <span>
+                <b>Compression</b>
+                <small>Raise the pressure</small>
+              </span>
+              <span class="arrow">↗</span>
+            </button>
+            <button class="cycle" data-part="condenser">
+              <span class="num">02</span>
+              <span>
+                <b>Condensation</b>
+                <small>Release heat outside</small>
+              </span>
+              <span class="arrow">↗</span>
+            </button>
+            <button class="cycle" data-part="expansion">
+              <span class="num">03</span>
+              <span>
+                <b>Expansion</b>
+                <small>Drop the pressure</small>
+              </span>
+              <span class="arrow">↗</span>
+            </button>
+            <button class="cycle" data-part="evaporator">
+              <span class="num">04</span>
+              <span>
+                <b>Evaporation</b>
+                <small>Absorb heat indoors</small>
+              </span>
+              <span class="arrow">↗</span>
+            </button>
+          </div>
+        </section>
+        <section class="detail">
+          <div class="eyebrow" id="partKicker">01 / OUTDOOR UNIT</div>
+          <h2 id="partTitle">Rotary compressor</h2>
+          <p id="partDescription">
+            An eccentric roller sweeps a changing chamber volume. A sliding vane
+            separates suction from compression.
+          </p>
+        </section>
+        <section class="telemetry">
+          <div class="section-head">
+            <b>Live operating data</b>
+            <span class="eyebrow" id="liveState">SIMULATED</span>
+          </div>
+          <div class="metrics">
+            <div class="metric">
+              <label>Compressor</label>
+              <strong id="rpm">—</strong>
+              <small>rpm</small>
+            </div>
+            <div class="metric">
+              <label>Room temperature</label>
+              <strong id="room">—</strong>
+              <small>°C</small>
+            </div>
+            <div class="metric">
+              <label>Low-side pressure</label>
+              <strong id="low">—</strong>
+              <small>bar(a)</small>
+            </div>
+            <div class="metric">
+              <label>High-side pressure</label>
+              <strong id="high">—</strong>
+              <small>bar(a)</small>
+            </div>
+          </div>
+          <div class="energy">
+            <div class="row">
+              <span>Cooling / Q̇ in</span>
+              <b id="cooling">—</b>
+            </div>
+            <div class="row">
+              <span>Electrical / Ẇ</span>
+              <b id="powerValue">—</b>
+            </div>
+            <div class="row">
+              <span>Heat rejected / Q̇ out</span>
+              <b id="rejected">—</b>
+            </div>
+            <div class="row">
+              <span>Cooling COP</span>
+              <b id="cop">—</b>
+            </div>
+            <div class="bar">
+              <span id="loadbar"> </span>
+            </div>
+          </div>
+          <p class="note">
+            Illustrative R32-like cycle, not service readings. Motion is slowed
+            by default so the mechanism stays visible.
+          </p>
+        </section>
+        <details class="lab">
+          <summary>Physics experiment controls</summary>
+          <div class="control">
+            <label for="heatGain"
+              >01 / ROOM HEAT INPUT <output id="heatGainValue">0.40 kW</output>
+            </label>
+            <input
+              id="heatGain"
+              type="range"
+              min="0"
+              max="2"
+              value="0.4"
+              step="0.05"
+            />
+          </div>
+          <div class="control">
+            <label for="area"
+              >02 / ACTIVE COIL AREA <output id="areaValue">100 %</output>
+            </label>
+            <input
+              id="area"
+              type="range"
+              min="60"
+              max="100"
+              value="100"
+              step="5"
+            />
+          </div>
+          <div class="control">
+            <label for="material">03 / FIN MATERIAL</label>
+            <select id="material">
+              <option value="205">Aluminum · k = 205 W/(m·K)</option>
+              <option value="385">Copper · k = 385 W/(m·K)</option>
+              <option value="50">Steel · k = 50 W/(m·K)</option>
+            </select>
+          </div>
+          <p id="finEfficiency">Fin efficiency: —</p>
+          <p>
+            Area changes the active fin height. Conductivity changes fin
+            efficiency and cooling capacity. Values are representative classroom
+            constants.
+          </p>
+        </details>
+      </aside>
+    </main>
+    <footer>
+      <button id="power" class="power" aria-pressed="true">
+        ⏻ &nbsp; System on
+      </button>
+      <div class="control">
+        <label for="setpoint"
+          >SET TEMPERATURE <output id="setpointValue">22 °C</output>
+        </label>
+        <input
+          id="setpoint"
+          type="range"
+          min="18"
+          max="28"
+          value="22"
+          step="1"
+        />
+      </div>
+      <div class="control">
+        <label for="ambient"
+          >OUTDOOR AIR <output id="ambientValue">35 °C</output>
+        </label>
+        <input
+          id="ambient"
+          type="range"
+          min="25"
+          max="43"
+          value="35"
+          step="1"
+        />
+      </div>
+      <div class="control">
+        <label for="speed"
+          >MOTION SPEED <output id="speedValue">0.03×</output>
+        </label>
+        <input id="speed" type="range" min="0" max="100" value="25" step="1" />
+      </div>
+      <div class="control" style="max-width: 150px">
+        <label for="fan">INDOOR FAN</label>
+        <select id="fan">
+          <option value="0.65">Low · 650 rpm</option>
+          <option value="0.85" selected>Auto · variable</option>
+          <option value="1">High · 1,000 rpm</option>
+        </select>
+      </div>
+      <div class="footer-note">
+        VAPOR-COMPRESSION / 3D<br />
+        <button id="modelInfo">Model & references ↗</button>
+      </div>
+    </footer>
+    <dialog id="guide">
+      <button class="close" id="closeGuide">Close ×</button>
+      <h2>Follow the heat.</h2>
+      <p>
+        Drag the model to orbit. Scroll or pinch to zoom. Select a numbered
+        cycle stage or a 3D component to inspect it. Switch to
+        <b>Explode parts</b> to separate the covers and grille while the core
+        keeps working.
+      </p>
+      <p>
+        <kbd>1</kbd> Assembled · <kbd>2</kbd> Cutaway ·
+        <kbd>3</kbd> Exploded<br />
+        <kbd>Space</kbd> Power · <kbd>T</kbd> Tour · <kbd>R</kbd> Reset view ·
+        <kbd>Esc</kbd> Close
+      </p>
+      <p>
+        The camera starts a gentle orbit after 12 seconds without interaction.
+        Turn Auto-tour off to keep a fixed view. Any drag immediately returns
+        camera control to you.
+      </p>
+      <p>
+        <b>Two clocks:</b> the room/operating model runs in real time (with a
+        small illustrative room thermal mass); the motion slider scales all
+        rotating parts and tracer flow together. At 0×, the mechanical view
+        freezes while telemetry continues. At 1×, fast blades may visually
+        alias.
+      </p>
+      <p>
+        <b>Model:</b> generic cooling-only inverter split system. Indoor
+        envelope 778 × 295 × 272 mm; outdoor envelope 765 × 550 × 285 mm.
+        Internal parts, spacing between units, tube diameter, and routing are
+        educational approximations. The rotary compressor uses an eccentric
+        roller tangent to its chamber and a geometrically constrained sliding
+        vane. A conventional illustrative outdoor metering valve is shown;
+        production routing varies by model.
+      </p>
+      <p>
+        <b>Experiment controls:</b> room heat input adds 0–2 kW; active coil
+        area scales capacity and fin height; fin conductivity changes the
+        straight-fin efficiency η = tanh(mL)/(mL), m = √(2h/kt), with h = 35
+        W/(m²·K), t = 0.15 mm, L = 25 mm. Capacity scales with active area ×
+        η/η(aluminum). This is an illustrative sensitivity model, not a complete
+        heat-exchanger solver. The room balance is C dT/dt = 0.045(Tout − Troom)
+        + Q̇ gain − Q̇ cooling, with C = 90 kJ/K.
+      </p>
+      <p>
+        <b>Thermodynamics:</b> capacity follows compressor load and fan setting.
+        A lift-based COP estimate drives electrical input; Q̇ out = Q̇ in + Ẇ.
+        Pressures use an illustrative saturation-pressure approximation, not an
+        R32 property table. No humidity, defrost, refrigerant charge, or fault
+        model is included.
+      </p>
+      <p>
+        Inspired by the
+        <a
+          href="https://thakicloud.com/tech-blog/en/tutorials/teardown-3d-skill/"
+          target="_blank"
+          rel="noopener"
+          >Teardown architecture reference</a
+        >. Cycle reference:
+        <a
+          href="https://basc.pnnl.gov/resource-guides/air-conditioning?existing_homes=602"
+          target="_blank"
+          rel="noopener"
+          >PNNL / Building America</a
+        >. Dimensions:
+        <a
+          href="https://www.daikinczech.cz/en_us/products/product.table.html/FTXM-R.html"
+          target="_blank"
+          rel="noopener"
+          >Daikin FTXM-R</a
+        >
+        and
+        <a
+          href="https://www.daikin.eu/content/dam/dauk/document-library/data-sheet/ac/R32/Split_SkyAir/FDXM-F9_RXM-R_Datasheet_1022B.pdf"
+          target="_blank"
+          rel="noopener"
+          >RXM-R</a
+        >. External references need internet; the simulator does not.
+      </p>
+      <p>
+        Three.js r160 (MIT), obtained from jsDelivr and embedded below. No
+        runtime requests, fonts, textures, or model downloads.
+      </p>
+    </dialog>
+    <noscript>
+      <div class="error">
+        JavaScript is disabled in this viewer. Open split-ac-simulator.html
+        directly in Chrome, Edge, or Firefox with JavaScript enabled.
+      </div>
+    </noscript>
+
+    <script src="src/errors.js"></script>
+    <script src="vendor/three.min.js"></script>
+    <script type="module" src="src/app.js"></script>
+  </body>
+</html>
