@@ -68,6 +68,7 @@ if (/<script[^>]+src=|<link[^>]+rel="stylesheet"/.test(html))
   throw new Error("Unbundled runtime asset");
 await mkdir(path.join(root, "dist"), { recursive: true });
 await writeFile(path.join(root, "dist/split-ac-simulator.html"), html);
+await writeFile(path.join(root, "dist/index.html"), html);
 console.log(
-  `Built dist/split-ac-simulator.html (${Buffer.byteLength(html).toLocaleString()} bytes). Open it directly in a browser.`,
+  `Built dist/index.html and dist/split-ac-simulator.html (${Buffer.byteLength(html).toLocaleString()} bytes).`,
 );
