@@ -214,13 +214,15 @@ function render(now) {
     item.el.classList.toggle(
       "hide",
       !state.labels ||
-        pos.z > 1 ||
-        pos.z < -1 ||
-        x < 55 ||
-        x > host.clientWidth - 55 ||
-        y < 190 ||
-        y > host.clientHeight - 110,
+        (item.part !== state.selected &&
+          (pos.z > 1 ||
+            pos.z < -1 ||
+            x < 55 ||
+            x > host.clientWidth - 55 ||
+            y < 190 ||
+            y > host.clientHeight - 110)),
     );
+    item.el.classList.toggle("selected", item.part === state.selected);
   });
   renderer.render(scene, camera);
   if (now - lastUI > 140) {
