@@ -1,0 +1,16 @@
+{
+  "name": "split-ac-simulator",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Interactive offline-capable split-system air conditioner simulator",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "start": "node scripts/serve.mjs",
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
